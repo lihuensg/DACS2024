@@ -1,0 +1,17 @@
+dacs:
+  messages:
+    error:
+      inesperado:          'Ocurrio un error en la aplicacion'
+      dato:
+        sin:
+          valor:
+            seleccionado:  'Debe seleccionar un valor'
+            ingresado:     'Debe ingresar un valor'
+        tipo:
+          incorrecto:      'El tipo de dato ingresado no es correcto'
+        valor:
+          incorrecto:      'El o los valores seleccionados no son correctos'
+      ejemplo:
+        con:
+          parametros:      'Los parametros ingresados son: {0}, {1} y {2}'
+      api:          'Hubo un error al consultar la API'

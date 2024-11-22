@@ -1,0 +1,25 @@
+<div class="libros-compartibles-container">
+  <h2>Libros Compartibles</h2>
+
+  <!-- Mensaje de error o éxito -->
+  <p *ngIf="mensaje" class="mensaje">{{ mensaje }}</p>
+
+  <!-- Lista de libros compartibles -->
+  <ul *ngIf="librosCompartibles.length > 0">
+    <li *ngFor="let libro of librosCompartibles">
+      <div class="libro-card">
+        <h3>{{ libro.titulo }}</h3>
+        <p><strong>Autor:</strong> {{ libro.nombreAutor }}</p>
+        <p><strong>Resumen:</strong> {{ libro.resumen }}</p>
+
+        <!-- Botón para prestar -->
+        <button (click)="prestarLibro(libro.id)">Obtener libro</button>
+      </div>
+    </li>
+  </ul>
+
+  <!-- Mensaje cuando no hay libros -->
+  <p *ngIf="librosCompartibles.length === 0">
+    No hay libros compartibles disponibles.
+  </p>
+</div>

@@ -1,0 +1,74 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/Dacs 
+        registration:
+          keycloak-login:
+            authorization-grant-type: authorization_code
+            client-id: dacs2024bff
+            client-secret: mnYRdDwPoAlhbv3vr8vHdPlwyEm3EyUs
+            provider: keycloak
+            scope: openid,profile,email,offline_access
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/Dacs
+          jwk-set-uri: ${JWK_URL:http://localhost:8080/realms/Dacs/protocol/openid-connect/certs}
+        jwk:
+          key-set-uri: ${JWK_URL:http://localhost:8080/realms/Dacs/protocol/openid-connect/certs}
+      aud:
+        active: 'false'
+        values: 'USUARIORUS,TEST,ANOTHERAUD'
+
+logging:
+  level:
+    root: info
+management:
+  security:
+    enabled: false
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /metrics
+      exposure:
+        include: "health,info"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
+        loggerLevel: basic
+      msApiConectorClient:
+        url: '${MS_CONECTOR_URL:http://localhost:9002}/conector'
+      msApiBackendClient:
+        url: '${MS_BACKEND_URL:http://localhost:9003}/backend'
+              
+dacs:
+  exceptions:
+    code-prefix: 'DACS-BFF'
+  cors:
+    allowed-origins: "*"
+    allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+    allowed-headers: "*"
+    max-age: 3600
+  oauth2:
+    service-account:
+      auth: ${IDP_URL:http://localhost:8080/realms/Dacs/protocol/openid-connect}
+      client-id: 'dacs2024bff'
+      secret: 'mnYRdDwPoAlhbv3vr8vHdPlwyEm3EyUs'
+      login:
+        url: ${IDP_LOGIN_URL:http://localhost:8080/realms/Dacs/protocol/openid-connect}
+        client-id: ${IDP_CLIENT_ID:dacs2024fe}
+  
+server:
+  port :  ${BFF_PORT:9009}
+  servlet:
+    contextPath: /bff

@@ -1,0 +1,63 @@
+<div class="buscar-libro">
+    <h2>Buscar Libro</h2>
+  
+    <div class="form-group">
+      <label for="criterioBusqueda">Criterio de Búsqueda</label>
+      <input
+        type="text"
+        id="criterioBusqueda"
+        [(ngModel)]="criterioBusqueda"
+        placeholder="Introduce ISBN, título o autor"
+      />
+    </div>
+  
+    <div class="form-group">
+      <label for="tipoBusqueda">Tipo de Búsqueda</label>
+      <select id="tipoBusqueda" [(ngModel)]="tipoBusqueda">
+        <option value="isbn">ISBN</option>
+        <option value="titulo">Título</option>
+        <option value="autor">Autor</option>
+      </select>
+    </div>
+  
+    <button (click)="buscarLibros()">Buscar</button>
+  
+    <div class="resultados-busqueda" *ngIf="resultadosBusqueda.length > 0">
+      <h3>Resultados de la Búsqueda</h3>
+      <ul>
+        <li *ngFor="let libro of resultadosBusqueda">
+          <strong>{{ libro.titulo }}</strong>
+          <button (click)="seleccionarLibro(libro)">Seleccionar</button>
+        </li>
+      </ul>
+    </div>
+  
+    <div class="form-edicion" *ngIf="libroEnEdicion">
+      <h3>Agregar Libro</h3>
+      <form>
+        <label for="isbn">ISBN:</label>
+        <input id="isbn" [(ngModel)]="libroEnEdicion.isbn" name="isbn" />
+  
+        <label for="autor">Autor:</label>
+        <input id="autor" [(ngModel)]="libroEnEdicion.nombreAutor" name="autor" />
+  
+        <label for="resumen">Resumen:</label>
+        <textarea
+          id="resumen"
+          [(ngModel)]="libroEnEdicion.resumen"
+          name="resumen"
+        ></textarea>
+  
+        <label for="compartir">¿Se puede compartir?</label>
+        <input
+          type="checkbox"
+          id="compartir"
+          [(ngModel)]="libroEnEdicion.sePuedeCompartir"
+          name="compartir"
+        />
+  
+        <button (click)="agregarLibro()">Guardar Libro</button>
+      </form>
+    </div>
+  </div>
+  

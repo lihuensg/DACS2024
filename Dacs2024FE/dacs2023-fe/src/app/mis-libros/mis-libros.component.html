@@ -1,0 +1,68 @@
+<div class="mis-libros-container">
+  <h2>Mis Libros</h2>
+
+  <!-- Mensaje cuando no hay libros -->
+  <div *ngIf="misLibros?.length === 0">
+    <p>No tienes libros registrados aún.</p>
+  </div>
+
+  <!-- Lista de libros -->
+  <ul *ngIf="misLibros && misLibros.length > 0">
+    <li *ngFor="let libro of misLibros">
+      <div class="libro-card">
+        <h3>{{ libro?.titulo }}</h3>
+        <p><strong>ISBN:</strong> {{ libro?.isbn }}</p>
+        <p><strong>Resumen:</strong> {{ libro?.resumen }}</p>
+        <p><strong>ID API:</strong> {{ libro?.idApi }}</p>
+        <p>
+          <strong>Se Puede Compartir:</strong>
+          {{ libro?.sePuedeCompartir ? "Sí" : "No" }}
+        </p>
+        <p><strong>Autor:</strong> {{ libro?.nombreAutor }}</p>
+        <img
+          *ngIf="libro?.portada"
+          [src]="libro.portada"
+          alt="{{ libro?.titulo }}"
+        />
+
+        <!-- Botones de acción -->
+        <button (click)="editarLibro(libro)">Actualizar</button>
+        <button (click)="eliminarLibro(libro)">Eliminar</button>
+
+        <!-- Formulario de edición para el libro actual -->
+        <div *ngIf="libroEnEdicion?.id === libro.id" class="edicion-form">
+          <h3>Editando: {{ libroEnEdicion?.titulo }}</h3>
+          <form (ngSubmit)="guardarCambios()">
+            <label>
+              Título:
+              <input [(ngModel)]="libroEnEdicion!.titulo" name="titulo" required />
+            </label>
+            <label>
+              ISBN:
+              <input [(ngModel)]="libroEnEdicion!.isbn" name="isbn" required />
+            </label>
+            <label>
+              Portada:
+              <input [(ngModel)]="libroEnEdicion!.portada" name="portada" />
+            </label>
+            <label>
+              Resumen:
+              <textarea [(ngModel)]="libroEnEdicion!.resumen" name="resumen"></textarea>
+            </label>
+            <label>
+              ID API:
+              <input [(ngModel)]="libroEnEdicion!.idApi" name="idApi" />
+            </label>
+            <label>
+              Autor:
+              <input [(ngModel)]="libroEnEdicion!.nombreAutor" name="nombreAutor" />
+            </label>
+
+            <button type="submit">Guardar</button>
+            <button type="button" (click)="cancelarEdicion()">Cancelar</button>
+          </form>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

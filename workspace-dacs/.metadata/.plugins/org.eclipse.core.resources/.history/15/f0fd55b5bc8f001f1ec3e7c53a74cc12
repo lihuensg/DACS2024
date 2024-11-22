@@ -1,0 +1,25 @@
+package utn.dacs.ms.conector.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+import utn.dacs.ms.conector.service.LibroService;
+import utn.dacs.ms.conector.dto.LibroDto;
+
+@RestController
+@RequestMapping("/libros")
+public class LibroController {
+
+    private final LibroService libroService;
+
+    @Autowired
+    public LibroController(LibroService libroService) {
+        this.libroService = libroService;
+    }
+
+    @GetMapping("/{isbn}")
+    public LibroDto obtenerLibro(@PathVariable String isbn) {
+        return libroService.obtenerLibroPorIsbn(isbn);
+    }
+}

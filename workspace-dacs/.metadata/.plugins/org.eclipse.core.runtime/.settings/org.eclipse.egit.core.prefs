@@ -1,0 +1,4 @@
+GitRepositoriesView.GitDirectories=C\:\\workspace-dacs\\dacs2023-backend\\.git;C\:\\workspace-dacs\\dacs2023-conector\\.git;C\:\\workspace-dacs\\dacs2023-bff\\.git;C\:\\Users\\lsegovia\\Desktop\\prueba\\dacs2023-backend\\.git;
+GitRepositoriesView.GitDirectories.relative=dacs2023-backend\\.git;dacs2023-conector\\.git;dacs2023-bff\\.git;C\:\\Users\\lsegovia\\Desktop\\prueba\\dacs2023-backend\\.git;
+core_autoIgnoreDerivedResources=false
+eclipse.preferences.version=1

@@ -1,0 +1,78 @@
+package utn.dacs.ms.bff.api.client;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import utn.dacs.ms.bff.dto.UsuarioDto;
+
+//import utn.dacs.ms.bff.dto.AlumnoDto;
+import utn.dacs.ms.bff.dto.BuildInfoDTO;
+import utn.dacs.ms.bff.dto.LibroDto;
+
+
+
+@FeignClient(
+			name = "msApiBackendClient", 
+			url = "${feign.client.config.msApiBackendClient.url}"
+			)
+
+public interface MsApiBackendClient {
+
+    @GetMapping("/ping")
+    String ping();
+    
+    @GetMapping("/version")
+    BuildInfoDTO version();
+    
+//    @GetMapping("/alumno")
+//    List<AlumnoDto> alumnos();
+//    
+//    @GetMapping("/alumno/{id}")
+//    AlumnoDto alumno(@PathVariable("id") Long id);
+
+    @PostMapping("/usuario/guardar")
+    void guardarUsuario(@RequestBody UsuarioDto usuarioDto); 
+    
+    @PostMapping("/libros/{libroId}/devolver/{usuarioId}")
+    void devolverLibro(@PathVariable("libroId") Long libroId, @PathVariable("usuarioId") UUID usuarioId);
+
+    
+    @PostMapping("/libros/{libroId}/prestar/{usuarioId}")
+    void prestarLibro(@PathVariable("libroId") Long libroId, @PathVariable("usuarioId") UUID usuarioId);
+    
+    @GetMapping("/libros/prestados")
+    List<LibroDto> obtenerLibrosPrestados(@RequestParam("usuarioId") UUID usuarioId);
+    
+    @GetMapping("/libros/devueltos")
+    List<LibroDto> obtenerLibrosDevueltos(@RequestParam("usuarioId") UUID usuarioId);
+    
+    @GetMapping("/libros")
+    List<LibroDto> obtenerTodosLosLibros();
+
+    @GetMapping("/libros/{id}")
+    LibroDto obtenerLibroPorId(@PathVariable("id") Long id);
+    
+    @GetMapping("/libros/compartibles")
+    List<LibroDto> obtenerLibrosCompartibles();
+
+    @PostMapping("/libros/agregar/{usuarioId}")
+    void agregarLibro(@PathVariable("usuarioId") UUID usuarioId, @RequestBody LibroDto libroDto);
+
+    @DeleteMapping("/libros/{id}")
+    void eliminarLibro(@PathVariable("id") Long id);
+
+    @PutMapping("/libros/{id}")
+    LibroDto actualizarLibro(@PathVariable("id") Long id, @RequestBody LibroDto libroDto);
+    
+    @GetMapping("/libros/usuario/{usuarioId}")
+    List<LibroDto> obtenerLibrosDeUsuario(@PathVariable("usuarioId") UUID idUsuario);
+}

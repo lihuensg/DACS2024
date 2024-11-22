@@ -1,0 +1,15 @@
+package utn.dacs.ms.conector.api.client;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import utn.dacs.ms.conector.dto.LibroDto;
+
+@FeignClient(name = "apiClientLibro", 
+				url = "${feign.client.config.apiClientLibro.url}", 
+				configuration = utn.dacs.ms.conector.config.FeignConfig.class)
+public interface ApiClientLibro {
+
+    @GetMapping("/books/{isbn}")
+    LibroDto obtenerDatosDeLibro(@PathVariable("isbn") String isbn);
+}

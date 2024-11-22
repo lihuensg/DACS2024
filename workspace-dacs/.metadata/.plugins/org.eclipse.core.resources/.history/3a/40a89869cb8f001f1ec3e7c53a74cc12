@@ -1,0 +1,21 @@
+package utn.dacs.ms.conector.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+public class LibroDto {
+    private Long id;
+    private String title;
+    private String image; // URL de la imagen de portada
+    //private List<AuthorDto> authors; // Lista de autores
+    private String isbn_10;
+    private String isbn_13;
+    private Double publishDate;
+    private Integer numberOfPages;
+    private String description;
+   //private RatingDto rating; // Calificación del libro
+}

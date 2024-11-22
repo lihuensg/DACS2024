@@ -1,0 +1,47 @@
+spring:
+  security:
+    enabled: false
+    basic:
+      enabled: false
+
+
+logging:
+  level:
+    root: info
+management:
+  security:
+    enabled: false
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /metrics
+      exposure:
+        include: "health,info"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 60000
+        loggerLevel: basic
+      apiClient:
+        url: '${API_URL:https://jsonplaceholder.typicode.com}'
+       
+dacs:
+  exceptions:
+    code-prefix: 'DACS-CONECTOR'
+  cors:
+    allowed-origins: "*"
+    allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+    allowed-headers: "*"
+    max-age: 3600
+  
+server:
+  port :  ${CONECTOR_PORT:9002}
+  servlet:
+    contextPath: /conector

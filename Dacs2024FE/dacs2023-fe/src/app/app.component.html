@@ -1,0 +1,96 @@
+<h1>Mi Aplicación Angular {{ title }} con Keycloak</h1>
+
+<nav>
+  <ul>
+    <li><a routerLink="/mis-libros">Mis Libros</a></li>
+    <li><a routerLink="/libros-compartibles">Libros compartibles</a></li>
+    <li><a routerLink="/buscar-libro">Buscar libro</a></li>
+  </ul>
+</nav>
+
+<button *ngIf="isLogueado" type="button" (click)="cerrarSesion()">
+  Cerrar Session
+</button>
+<button *ngIf="!isLogueado" type="button" (click)="iniciarSesion()">
+  Iniciar Session
+</button>
+
+<router-outlet></router-outlet>
+
+<!-- <ng-container *ngIf="role">
+  <h2>TIENE EL ROLL DE APP !!</h2>
+</ng-container>
+<ng-container *ngIf="perfilUsuario">
+  <h2>Informacion del Usuario</h2>
+  <table>
+    <tr *ngIf="perfilUsuario.username">
+      <th scope="row">Usuario</th>
+      <td>{{ perfilUsuario.username }}</td>
+    </tr>
+    <tr *ngIf="perfilUsuario.firstName">
+      <th scope="row">Primer Nombre</th>
+      <td>{{ perfilUsuario.firstName }}</td>
+    </tr>
+    <tr *ngIf="perfilUsuario.lastName">
+      <th scope="row">Segundo Nombre</th>
+      <td>{{ perfilUsuario.lastName }}</td>
+    </tr>
+    <tr *ngIf="perfilUsuario.email">
+      <th scope="row">Correo Electronico</th>
+      <td>{{ perfilUsuario.email }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Correo Verificado</th>
+      <td>{{ perfilUsuario.emailVerified ? "Si" : "No" }}</td>
+    </tr>
+  </table>
+</ng-container>
+<ng-container *ngIf="testResponse">
+  <h2>Informacion version</h2>
+  <table>
+    <tr *ngIf="testResponse.version">
+      <th scope="row">Version</th>
+      <td>{{ testResponse.version }}</td>
+    </tr>
+  </table>
+</ng-container>
+
+<ng-container *ngIf="apiPing">
+  <h2>PING A BFF</h2>
+  <table>
+    <tr *ngIf="apiPing">
+      <th scope="row">Response</th>
+      <td>{{ apiPing }}</td>
+    </tr>
+  </table>
+</ng-container>
+
+<ng-container *ngIf="apiConectorPing">
+  <h2>PING A CONECTOR</h2>
+  <table>
+    <tr *ngIf="apiConectorPing">
+      <th scope="row">Response</th>
+      <td>{{ apiConectorPing }}</td>
+    </tr>
+  </table>
+</ng-container>
+
+<ng-container *ngIf="apiBackendPing">
+  <h2>PING A BACKEND</h2>
+  <table>
+    <tr *ngIf="apiBackendPing">
+      <th scope="row">Response</th>
+      <td>{{ apiBackendPing }}</td>
+    </tr>
+  </table>
+</ng-container>
+
+<ng-container *ngIf="alumnos">
+  <h2>ALUMNOS DESDE BACKEND</h2>
+  <table>
+    <tr *ngIf="alumnos">
+      <th scope="row">Alumnos</th>
+      <td>{{ alumnos }}</td>
+    </tr>
+  </table>
+</ng-container> -->

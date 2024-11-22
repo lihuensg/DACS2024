@@ -1,0 +1,38 @@
+spring:
+  security:
+    enabled: false
+    basic:
+      enabled: false
+
+
+logging:
+  level:
+    root: info
+management:
+  security:
+    enabled: false
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /metrics
+      exposure:
+        include: "health,info"
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+       
+dacs:
+  exceptions:
+    code-prefix: 'DACS-BACKENDS'
+  cors:
+    allowed-origins: "*"
+    allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+    allowed-headers: "*"
+    max-age: 3600
+  
+server:
+  port :  ${CONECTOR_PORT:9003}
+  servlet:
+    contextPath: /backend

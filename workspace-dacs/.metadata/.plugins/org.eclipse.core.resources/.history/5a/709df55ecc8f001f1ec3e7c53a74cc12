@@ -1,0 +1,17 @@
+package utn.dacs.ms.conector.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import utn.dacs.ms.conector.api.client.LibroApiClient;
+import utn.dacs.ms.conector.dto.LibroDto;
+
+@Service
+public class LibroService {
+    
+    @Autowired
+    private LibroApiClient libroApiClient;
+
+    public LibroDto obtenerDatosDeLibro(String isbn) {
+        return libroApiClient.obtenerDatosDeLibro(isbn);
+    }
+}

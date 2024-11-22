@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;dacs2023-backend&apos;&#x0D;&#x0A;- Original project: &apos;dacs2023-backend&apos;&#x0D;&#x0A;- Original element: &apos;utn.dacs.ms.backend.model.entity.HistorialTransaccionesRepository.java&apos;" description="Delete element" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;utn.dacs.ms.backend.model.entity{HistorialTransaccionesRepository.java" elements="1" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1730160720527" subPackages="false" version="1.0"/>
+</session>
