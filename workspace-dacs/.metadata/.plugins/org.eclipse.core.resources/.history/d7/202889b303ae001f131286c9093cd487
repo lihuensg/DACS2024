@@ -1,0 +1,27 @@
+package utn.dacs.ms.backend.service;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import utn.dacs.ms.backend.model.entity.Feedback;
+import utn.dacs.ms.backend.model.repository.FeedbackRepository;
+
+@Service
+public class FeedbackServiceImpl implements FeedbackService {
+
+    @Autowired
+    private FeedbackRepository feedbackRepository;
+
+    @Override
+    public boolean eliminarFeedbackPorLibroId(UUID libroId) {
+        Optional<Feedback> feedbackOpt = feedbackRepository.findByLibroId(libroId);
+        if (feedbackOpt.isPresent()) {
+            feedbackRepository.delete(feedbackOpt.get());
+            return true;
+        }
+        return false;
+    }
+}

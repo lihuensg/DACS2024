@@ -5,21 +5,27 @@
   <p *ngIf="mensaje" class="mensaje">{{ mensaje }}</p>
 
   <!-- Lista de libros compartibles -->
-  <ul *ngIf="librosCompartibles.length > 0">
-    <li *ngFor="let libro of librosCompartibles">
-      <div class="libro-card">
+  <ul *ngIf="librosCompartibles.length > 0" class="libro-lista">
+    <li *ngFor="let libro of librosCompartibles" class="libro-card">
+      <img
+        *ngIf="libro.portada"
+        [src]="libro.portada"
+        alt="{{ libro.titulo }}"
+        class="libro-portada"
+      />
+      <div class="libro-info">
         <h3>{{ libro.titulo }}</h3>
         <p><strong>Autor:</strong> {{ libro.nombreAutor }}</p>
         <p><strong>Resumen:</strong> {{ libro.resumen }}</p>
-
-        <!-- Botón para prestar -->
+      </div>
+      <div class="libro-acciones">
         <button (click)="prestarLibro(libro.id)">Obtener libro</button>
       </div>
     </li>
   </ul>
 
   <!-- Mensaje cuando no hay libros -->
-  <p *ngIf="librosCompartibles.length === 0">
+  <p *ngIf="librosCompartibles.length === 0" class="empty-message">
     No hay libros compartibles disponibles.
   </p>
 </div>

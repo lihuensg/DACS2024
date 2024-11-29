@@ -1,0 +1,33 @@
+<div class="feedback-libros-container">
+  <h2>Mis Libros Devueltos con Calificación y Comentarios</h2>
+
+  <!-- Mensaje de error o éxito -->
+  <div *ngIf="mensaje" class="mensaje-error">
+    {{ mensaje }}
+  </div>
+
+  <div *ngIf="feedbackLibros.length > 0; else noFeedback">
+    <div *ngFor="let feedback of feedbackLibros" class="feedback-card">
+      <div class="feedback-card-inner">
+        <!-- Imagen del libro -->
+        <img [src]="feedback.libro.portada" alt="Portada de {{ feedback.libro.titulo }}" class="libro-portada" />
+        
+        <div class="libro-info">
+          <h3>{{ feedback.libro.titulo }} - {{ feedback.libro.nombreautor || 'Autor no disponible' }}</h3>
+          <p><strong>Nota:</strong> {{ feedback.nota }}</p>
+          <p><strong>Comentario:</strong> {{ feedback.comentario }}</p>
+        </div>
+
+        <!-- Botón para eliminar el feedback -->
+        <button class="btn btn-danger btn-sm" (click)="eliminarFeedback(feedback.id)">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje si no hay feedbacks -->
+  <ng-template #noFeedback>
+    <p>No tienes libros devueltos con calificación o comentario.</p>
+  </ng-template>
+</div>

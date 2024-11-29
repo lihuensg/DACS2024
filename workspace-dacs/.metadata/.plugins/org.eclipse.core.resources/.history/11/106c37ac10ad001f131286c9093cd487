@@ -1,0 +1,41 @@
+package utn.dacs.ms.backend.controller;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import utn.dacs.ms.backend.model.entity.Feedback;
+import utn.dacs.ms.backend.service.FeedbackService;
+
+@RestController
+@RequestMapping("/api/feedback")
+public class FeedbackController {
+
+    private final FeedbackService feedbackService;
+
+    public FeedbackController(FeedbackService feedbackService) {
+        this.feedbackService = feedbackService;
+    }
+
+    @PostMapping("/agregar")
+    public ResponseEntity<Feedback> agregarFeedback(
+            @RequestParam Long libroId,
+            @RequestParam int nota,
+            @RequestParam String comentario) {
+
+        Feedback feedback = feedbackService.agregarFeedback(libroId, nota, comentario);
+        return ResponseEntity.ok(feedback);
+    }
+
+    @GetMapping("/{libroId}")
+    public ResponseEntity<List<Feedback>> obtenerFeedbackPorLibro(@PathVariable Long libroId) {
+        List<Feedback> feedbacks = feedbackService.obtenerFeedbackPorLibro(libroId);
+        return ResponseEntity.ok(feedbacks);
+    }
+}

@@ -1,0 +1,31 @@
+package utn.dacs.ms.backend.controller;
+
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import utn.dacs.ms.backend.service.FeedbackService;
+
+@RestController
+@RequestMapping("/backend")
+public class FeedbackController {
+
+    @Autowired
+    private FeedbackService feedbackService;
+
+    @DeleteMapping("/feedback/{libroId}")
+    public String eliminarFeedback(@PathVariable Long libroId) {
+        boolean eliminado = feedbackService.eliminarFeedbackPorLibroId(libroId);
+        if (eliminado) {
+            return "Feedback eliminado correctamente.";
+        } else {
+            return "No se encontró feedback para el libro con ID: " + libroId;
+        }
+    }
+}

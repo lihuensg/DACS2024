@@ -1,0 +1,135 @@
+package utn.dacs.ms.bff.controller;
+
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.extern.slf4j.Slf4j;
+//import utn.dacs.ms.bff.dto.AlumnoDto;
+import utn.dacs.ms.bff.dto.BuildInfoDTO;
+import utn.dacs.ms.bff.dto.LibroDto;
+import utn.dacs.ms.bff.exceptions.BffException;
+import utn.dacs.ms.bff.exceptions.ErrorEnum;
+import utn.dacs.ms.bff.service.MsApiBackendService;
+
+@RestController
+@RequestMapping("/backend")
+@Slf4j
+public class MsBackendController {
+
+    @Autowired
+    private MsApiBackendService apiBackendService;
+
+    @GetMapping("/ping")
+    public String ping() {
+        return apiBackendService.ping();
+    }
+    
+    @GetMapping("/version")
+    public BuildInfoDTO version() {
+        return apiBackendService.version();
+    }
+    
+   
+//    @GetMapping("/alumno")
+//    public List<AlumnoDto> getAlumnos() {
+//    	return apiBackendService.getAlumnos();
+//    }
+//   
+//    @GetMapping("/alumno/{id}")
+//    public AlumnoDto getAlumnoById(@PathVariable Long id) {
+//        return apiBackendService.getAlumnoById(id);
+//    }
+    
+    @PostMapping("/libros/{libroId}/devolver/{usuarioId}")
+    public ResponseEntity<String> devolverLibro(@PathVariable Long libroId, @PathVariable UUID usuarioId) {
+        apiBackendService.devolverLibro(libroId, usuarioId);
+        return ResponseEntity.ok("Libro devuelto con éxito.");
+    }
+    
+    @PostMapping("/libros/{libroId}/prestar/{usuarioId}")
+    public ResponseEntity<String> prestarLibro(@PathVariable Long libroId, @PathVariable UUID usuarioId) {
+        try {
+            apiBackendService.prestarLibro(libroId, usuarioId);
+            return ResponseEntity.ok("Libro prestado con éxito.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al prestar el libro.");
+        }
+    }
+    
+    @GetMapping("/libros/devueltos")
+    public List<LibroDto> obtenerLibrosDevueltos(@RequestParam UUID usuarioId) {
+        return apiBackendService.obtenerLibrosDevueltos(usuarioId);
+    }
+    
+    @GetMapping("/libros/prestados")
+    public List<LibroDto> obtenerLibrosPrestados(@RequestParam UUID usuarioId) {
+        return apiBackendService.obtenerLibrosPrestados(usuarioId);
+    }
+    
+    @GetMapping("/libros/{id}")
+    public LibroDto obtenerLibroPorId(@PathVariable Long id) { 
+           return apiBackendService.obtenerLibroPorId(id);
+    }
+
+    @GetMapping("/libros")
+    public List<LibroDto> obtenerTodosLosLibros() {
+        return apiBackendService.obtenerTodosLosLibros();
+    }
+    
+    @GetMapping("/libros/compartibles")
+    public List<LibroDto> obtenerLibrosCompartibles() {
+        return apiBackendService.obtenerLibrosCompartibles();
+    }
+
+    @PostMapping("/libros/agregar/{usuarioId}")
+    public ResponseEntity<Void> agregarLibro(@PathVariable UUID usuarioId, @RequestBody LibroDto libroDto) {
+        apiBackendService.agregarLibro(usuarioId, libroDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/libros/{id}")
+    public ResponseEntity<?> eliminarLibroConTransacciones(@PathVariable Long id) {
+        try {
+            apiBackendService.eliminarLibroConTransacciones(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            log.error("Error al eliminar el libro: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            log.error("Error inesperado: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    
+    @PutMapping("/libros/{id}")
+    public LibroDto actualizarLibro(@PathVariable Long id, @RequestBody LibroDto libroDto) {
+        return apiBackendService.actualizarLibro(id, libroDto);
+    }
+    
+    @GetMapping("/libros/usuario/{idUsuario}")
+    public ResponseEntity<?> obtenerLibrosDeUsuario(@PathVariable("idUsuario") UUID idUsuario) {
+        try {
+            log.info("Recibiendo solicitud para obtener libros del usuario con ID: {}", idUsuario);
+            List<LibroDto> libros = apiBackendService.obtenerLibrosDeUsuario(idUsuario);
+            return ResponseEntity.ok(libros);
+        } catch (RuntimeException e) {
+            log.error("Error al obtener libros: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    
+ }

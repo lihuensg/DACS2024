@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
+import utn.dacs.ms.backend.model.entity.Feedback;
 //import utn.dacs.ms.bff.dto.AlumnoDto;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
 import utn.dacs.ms.bff.dto.LibroDto;
@@ -54,10 +55,14 @@ public class MsBackendController {
 //        return apiBackendService.getAlumnoById(id);
 //    }
     
-    @PostMapping("/libros/{libroId}/devolver/{usuarioId}")
-    public ResponseEntity<String> devolverLibro(@PathVariable Long libroId, @PathVariable UUID usuarioId) {
-        apiBackendService.devolverLibro(libroId, usuarioId);
-        return ResponseEntity.ok("Libro devuelto con éxito.");
+    @PostMapping("/libros/{libroId}/devolver")
+    public ResponseEntity<String> devolverLibroConFeedback(
+            @PathVariable Long libroId,
+            @RequestParam UUID usuarioId,
+            @RequestParam int nota,
+            @RequestParam String comentario) {
+        // Llama al servicio para procesar la devolución del libro
+        return apiBackendService.devolverLibroConFeedback(libroId, usuarioId, nota, comentario);
     }
     
     @PostMapping("/libros/{libroId}/prestar/{usuarioId}")
@@ -71,8 +76,9 @@ public class MsBackendController {
     }
     
     @GetMapping("/libros/devueltos")
-    public List<LibroDto> obtenerLibrosDevueltos(@RequestParam UUID usuarioId) {
-        return apiBackendService.obtenerLibrosDevueltos(usuarioId);
+    public ResponseEntity<List<Feedback>> obtenerLibrosDevueltosConFeedback(@RequestParam UUID usuarioId) {
+        // Llama al servicio para obtener los libros devueltos con feedback
+        return apiBackendService.obtenerLibrosDevueltosConFeedback(usuarioId);
     }
     
     @GetMapping("/libros/prestados")
@@ -90,16 +96,37 @@ public class MsBackendController {
         return apiBackendService.obtenerTodosLosLibros();
     }
     
-    @GetMapping("/libros/compartibles")
-    public List<LibroDto> obtenerLibrosCompartibles() {
-        return apiBackendService.obtenerLibrosCompartibles();
+    @GetMapping("/libros/compartibles/{usuarioId}")
+    public List<LibroDto> obtenerLibrosCompartiblesExcluyendoUsuario(@PathVariable UUID usuarioId) {
+        return apiBackendService.obtenerLibrosCompartibles(usuarioId);
     }
 
     @PostMapping("/libros/agregar/{usuarioId}")
-    public ResponseEntity<Void> agregarLibro(@PathVariable UUID usuarioId, @RequestBody LibroDto libroDto) {
-        apiBackendService.agregarLibro(usuarioId, libroDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<String> agregarLibro(@PathVariable UUID usuarioId, @RequestBody LibroDto libroDto) {
+        log.info("Agregando libro para el usuario con ID {}", usuarioId);
+
+        ResponseEntity<String> response = apiBackendService.agregarLibro(usuarioId, libroDto);
+
+        // Verificar los errores específicos
+        if (response.getStatusCode() == HttpStatus.BAD_REQUEST && response.getBody() != null) {
+            String errorMessage = response.getBody();
+            
+            // Error cuando el libro ya está en la colección del mismo usuario
+            if (errorMessage.contains("Este libro ya está en tu colección")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                     .body("Este libro ya está en tu colección. No puedes agregarlo de nuevo.");
+            }
+            
+            // Error cuando el libro ya pertenece a otro usuario
+            if (errorMessage.contains("Este libro ya pertenece a otro usuario")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                     .body("Este libro ya pertenece a otro usuario. No se puede agregar.");
+            }
+        }
+
+        return response; // Devolvemos la respuesta directamente si no es uno de los errores anteriores
     }
+
 
     @DeleteMapping("/libros/{id}")
     public ResponseEntity<?> eliminarLibroConTransacciones(@PathVariable Long id) {
@@ -132,4 +159,20 @@ public class MsBackendController {
         }
     }
     
+    @GetMapping("/libros/nodevueltos/{usuarioId}")
+    public ResponseEntity<List<LibroDto>> obtenerLibrosNoDevueltos(@PathVariable UUID usuarioId) {
+        List<LibroDto> librosNoDevueltos = apiBackendService.obtenerLibrosNoDevueltos(usuarioId);
+        return ResponseEntity.ok(librosNoDevueltos);
+    }
+    
+    @DeleteMapping("/feedback/eliminar/{feedbackId}")
+    public ResponseEntity<String> eliminarFeedback(@PathVariable Long feedbackId) {
+        boolean eliminado = apiBackendService.eliminarFeedback(feedbackId);
+        
+        if (eliminado) {
+            return ResponseEntity.ok("Feedback eliminado correctamente");
+        } else {
+            return ResponseEntity.status(404).body("No se encontró el Feedback para eliminar");
+        }
+    }
  }

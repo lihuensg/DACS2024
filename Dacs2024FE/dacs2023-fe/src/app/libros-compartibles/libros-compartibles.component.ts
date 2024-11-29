@@ -35,7 +35,7 @@ export class LibrosCompartiblesComponent implements OnInit {
   }
   // Obtener libros compartibles
   cargarLibrosCompartibles() {
-    this.apiService.getLibrosCompartibles().subscribe(
+    this.apiService.getLibrosCompartibles(this.usuarioId).subscribe(
       (libros) => {
         this.librosCompartibles = libros;
       },

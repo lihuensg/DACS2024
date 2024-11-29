@@ -1,0 +1,77 @@
+.feedback-card {
+  display: flex;
+  align-items: flex-start; /* Ajusta la alineación superior */
+  border: 1px solid #ccc;
+  padding: 15px; /* Más espacio interno */
+  margin-bottom: 15px; /* Más separación entre tarjetas */
+  border-radius: 8px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15); /* Sombra más suave */
+  background-color: #f9f9f9; /* Fondo más claro para resaltar */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-card:hover {
+  transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2); /* Sombra más marcada al pasar el mouse */
+}
+
+.feedback-card-inner {
+  display: flex;
+  align-items: flex-start; /* Alineación superior */
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px; /* Espaciado entre elementos */
+}
+
+.libro-portada {
+  width: 120px; /* Tamaño más destacado */
+  height: auto;
+  margin-right: 20px;
+  border-radius: 5px; /* Bordes redondeados para la portada */
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.libro-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.libro-info h3 {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.libro-info p {
+  font-size: 0.95em;
+  color: #555;
+  margin: 5px 0;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 15px; /* Botón más grande */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: scale(1.05); /* Agranda ligeramente el botón al pasar el mouse */
+}
+
+.btn-danger:active {
+  background-color: #a71d2a;
+  transform: scale(0.98); /* Efecto de clic */
+}
+
+.feedback-actions {
+  display: flex;
+  justify-content: flex-end; /* Botones alineados a la derecha */
+  margin-top: 10px;
+}

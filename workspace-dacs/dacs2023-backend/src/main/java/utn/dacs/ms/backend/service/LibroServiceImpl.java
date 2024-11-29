@@ -1,13 +1,16 @@
 package utn.dacs.ms.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import utn.dacs.ms.backend.dto.LibroDto;
+import utn.dacs.ms.backend.model.entity.Feedback;
 import utn.dacs.ms.backend.model.entity.HistorialTransacciones;
 import utn.dacs.ms.backend.model.entity.Libro;
 import utn.dacs.ms.backend.model.entity.Usuario;
 import utn.dacs.ms.backend.model.repository.LibroRepository;
+import utn.dacs.ms.backend.model.repository.FeedbackRepository;
 import utn.dacs.ms.backend.model.repository.HistorialTransaccionesRepository;
 import utn.dacs.ms.backend.model.repository.UsuarioRepository;
 
@@ -18,9 +21,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
-
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class LibroServiceImpl implements LibroService {
 
     @Autowired
@@ -31,6 +35,9 @@ public class LibroServiceImpl implements LibroService {
 
     @Autowired
     private HistorialTransaccionesRepository historialTransaccionesRepository;
+    
+    @Autowired
+    private final FeedbackRepository feedbackRepository;
     
     @Override
     public ResponseEntity<List<LibroDto>> obtenerLibrosDeUsuario(UUID usuarioId) {
@@ -55,6 +62,23 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     public ResponseEntity<String> agregarLibro(UUID usuarioId, LibroDto libroDto) {
+        // Verificar si el libro ya existe en la base de datos
+        Optional<Libro> libroExistente = libroRepository.findByIdapi(libroDto.getIdApi());
+        
+        if (libroExistente.isPresent()) {
+            Libro libro = libroExistente.get();
+            if (libro.getUsuario().getId().equals(usuarioId)) {
+                // El libro ya pertenece al usuario actual
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Este libro ya está en tu colección.");
+            } else {
+                // El libro pertenece a otro usuario
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Este libro ya pertenece a otro usuario.");
+            }
+        }
+
+        // Si el libro no existe, continuar con el proceso de guardado
         Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
         if (usuario == null) {
             return ResponseEntity.notFound().build();
@@ -92,11 +116,21 @@ public class LibroServiceImpl implements LibroService {
     }
     
     @Override
-    public List<LibroDto> obtenerLibrosCompartibles() {
-        List<Libro> librosCompartibles = libroRepository.findBySepuedecompartirTrue();
+    public List<LibroDto> obtenerLibrosCompartibles(UUID usuarioId) {
+        List<Libro> librosCompartibles = libroRepository.findCompartiblesExcluyendoUsuario(usuarioId);
         return librosCompartibles.stream()
-            .map(libro -> new LibroDto(libro.getId(), libro.getTitulo(), libro.getIsbn(), libro.getPortada(), libro.getResumen(), libro.getIdapi().intValue(), libro.getArchivado(), libro.getSepuedecompartir(), libro.getNombreautor()))
-            .collect(Collectors.toList());
+                .map(libro -> new LibroDto(
+                        libro.getId(),
+                        libro.getTitulo(),
+                        libro.getIsbn(),
+                        libro.getPortada(),
+                        libro.getResumen(),
+                        libro.getIdapi(),
+                        libro.getArchivado(),
+                        libro.getSepuedecompartir(),
+                        libro.getNombreautor()
+                ))
+                .collect(Collectors.toList());
     }
 
    
@@ -168,8 +202,13 @@ public class LibroServiceImpl implements LibroService {
     }
 
     @Override
-    public void devolverLibro(Long libroId, UUID usuarioId) {
-        // Obtener la última transacción de préstamo activa para el libro y el usuario
+    public void devolverLibroConFeedback(Long libroId, UUID usuarioId, int nota, String comentario) {
+        // Validar que la nota esté en el rango de 1 a 5
+        if (nota < 1 || nota > 5) {
+            throw new IllegalArgumentException("La nota debe estar entre 1 y 5.");
+        }
+
+        // Obtener la transacción activa
         HistorialTransacciones transaccion = historialTransaccionesRepository
                 .findTopByLibroIdAndUsuarioIdAndDevueltoFalse(libroId, usuarioId)
                 .orElseThrow(() -> new RuntimeException("No hay transacción activa para este libro y usuario."));
@@ -182,8 +221,20 @@ public class LibroServiceImpl implements LibroService {
         Libro libro = transaccion.getLibro();
         libro.setSepuedecompartir(true); // El libro puede ser prestado nuevamente
         libroRepository.save(libro);
+
+        // Guardar el feedback
+        Feedback feedback = new Feedback();
+        feedback.setLibro(libro);
+        feedback.setNota(nota);
+        feedback.setComentario(comentario);
+        feedbackRepository.save(feedback);
     }
+
     
+    @Override
+    public List<Feedback> obtenerLibrosDevueltosConFeedback(UUID usuarioId) {
+        return feedbackRepository.findAllByUsuarioId(usuarioId);
+    }
    
     @Override
     public List<Libro> obtenerLibrosPrestados(UUID usuarioId) {
@@ -205,6 +256,25 @@ public class LibroServiceImpl implements LibroService {
             .filter(libro -> libro.getSepuedecompartir() &&
                              historialTransaccionesRepository.existsByLibroAndUsuarioAndDevueltoTrue(libro, usuario))
             .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<LibroDto> obtenerLibrosNoDevueltos(UUID usuarioId) {
+        List<Libro> librosNoDevueltos = historialTransaccionesRepository.findLibrosNoDevueltosByUsuarioId(usuarioId);
+
+        return librosNoDevueltos.stream()
+                .map(libro -> new LibroDto(
+                        libro.getId(),
+                        libro.getTitulo(),
+                        libro.getIsbn(),
+                        libro.getPortada(),
+                        libro.getResumen(),
+                        libro.getIdapi(), 
+                        libro.getArchivado(),
+                        libro.getSepuedecompartir(),
+                        libro.getNombreautor()
+                ))
+                .collect(Collectors.toList());
     }
 }
 

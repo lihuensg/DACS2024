@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import utn.dacs.ms.bff.dto.UsuarioDto;
-
+import utn.dacs.ms.backend.model.entity.Feedback;
 //import utn.dacs.ms.bff.dto.AlumnoDto;
 import utn.dacs.ms.bff.dto.BuildInfoDTO;
 import utn.dacs.ms.bff.dto.LibroDto;
@@ -42,8 +43,12 @@ public interface MsApiBackendClient {
     @PostMapping("/usuario/guardar")
     void guardarUsuario(@RequestBody UsuarioDto usuarioDto); 
     
-    @PostMapping("/libros/{libroId}/devolver/{usuarioId}")
-    void devolverLibro(@PathVariable("libroId") Long libroId, @PathVariable("usuarioId") UUID usuarioId);
+    @PostMapping("/libros/{libroId}/devolver")
+    ResponseEntity<String> devolverLibroConFeedback(
+            @PathVariable("libroId") Long libroId,
+            @RequestParam("usuarioId") UUID usuarioId,
+            @RequestParam("nota") int nota,
+            @RequestParam("comentario") String comentario);
 
     
     @PostMapping("/libros/{libroId}/prestar/{usuarioId}")
@@ -53,7 +58,7 @@ public interface MsApiBackendClient {
     List<LibroDto> obtenerLibrosPrestados(@RequestParam("usuarioId") UUID usuarioId);
     
     @GetMapping("/libros/devueltos")
-    List<LibroDto> obtenerLibrosDevueltos(@RequestParam("usuarioId") UUID usuarioId);
+    ResponseEntity<List<Feedback>> obtenerLibrosDevueltosConFeedback(@RequestParam("usuarioId") UUID usuarioId);
     
     @GetMapping("/libros")
     List<LibroDto> obtenerTodosLosLibros();
@@ -61,8 +66,8 @@ public interface MsApiBackendClient {
     @GetMapping("/libros/{id}")
     LibroDto obtenerLibroPorId(@PathVariable("id") Long id);
     
-    @GetMapping("/libros/compartibles")
-    List<LibroDto> obtenerLibrosCompartibles();
+    @GetMapping("/libros/compartibles/{usuarioId}")
+    List<LibroDto> obtenerLibrosCompartibles(@PathVariable("usuarioId") UUID usuarioId);
 
     @PostMapping("/libros/agregar/{usuarioId}")
     void agregarLibro(@PathVariable("usuarioId") UUID usuarioId, @RequestBody LibroDto libroDto);
@@ -75,4 +80,10 @@ public interface MsApiBackendClient {
     
     @GetMapping("/libros/usuario/{idUsuario}")
     List<LibroDto> obtenerLibrosDeUsuario(@PathVariable("idUsuario") UUID idUsuario);
+    
+    @GetMapping("libros/nodevueltos/{usuarioId}")
+    List<LibroDto> obtenerLibrosNoDevueltos(@PathVariable UUID usuarioId);
+    
+    @DeleteMapping("/feedback/eliminar/{feedbackId}")
+    void eliminarFeedback(@PathVariable("feedbackId") Long feedbackId);
 }

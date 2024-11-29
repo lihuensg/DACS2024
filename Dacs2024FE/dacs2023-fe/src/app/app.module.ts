@@ -11,12 +11,16 @@ import { MisLibrosComponent } from './mis-libros/mis-libros.component';
 import { FormsModule } from '@angular/forms';
 import { LibrosCompartiblesComponent } from './libros-compartibles/libros-compartibles.component';
 import { BuscarLibroComponent } from './buscar-libro/buscar-libro.component';
+import { DevolverLibrosComponent } from './devolver-libros/devolver-libros.component';
+import { FeedbackLibrosComponent } from './feedback-libros/feedback-libros.component';
 @NgModule({
   declarations: [
     AppComponent,
     MisLibrosComponent,
     LibrosCompartiblesComponent,
     BuscarLibroComponent,
+    DevolverLibrosComponent,
+    FeedbackLibrosComponent,
   ],
   imports: [
     BrowserModule,

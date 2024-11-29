@@ -1,0 +1,80 @@
+.devolver-libros-container {
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.devolver-libros-container h2 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.mensaje-exito {
+  color: green;
+  margin-bottom: 15px;
+}
+
+.libro-card {
+  display: flex;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.libro-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.libro-card img {
+  max-width: 100px;
+  margin-right: 20px;
+  border-radius: 5px;
+}
+
+.info-libro h3 {
+  font-size: 1.2em;
+  color: #333;
+}
+
+.input-feedback label {
+  display: block;
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.input-feedback input, .input-feedback textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.input-feedback .error-message {
+  color: red;
+  font-size: 0.9em;
+}
+
+.btn-devolver {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.btn-devolver:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.noLibros {
+  font-style: italic;
+  color: #888;
+}

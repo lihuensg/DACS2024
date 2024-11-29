@@ -1,131 +1,116 @@
 .mis-libros-container {
-    max-width: 800px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-    color: #333;
-    padding: 20px;
-  }
-  
-  .mis-libros-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #555;
-  }
-  
-  .mis-libros-container p {
-    font-size: 16px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin-bottom: 20px;
-  }
-  
-  .libro-card {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .libro-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .libro-card h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #222;
-  }
-  
-  .libro-card p {
-    margin: 5px 0;
-  }
-  
-  .libro-card img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  .libro-card button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 12px;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: background-color 0.3s;
-  }
-  
-  .libro-card button:hover {
-    background-color: #0056b3;
-  }
-  
-  .libro-card button:last-child {
-    background-color: #dc3545;
-  }
-  
-  .libro-card button:last-child:hover {
-    background-color: #a71d2a;
-  }
-  
-  .no-books-message {
-    text-align: center;
-    font-size: 18px;
-    color: #777;
-  }
-  
-/* Formulario */
-  .edicion-form {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 5px;
-  }
-  
-  .edicion-form h3 {
-    margin-top: 0;
-  }
-  
-  .edicion-form label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .edicion-form input,
-  .edicion-form textarea {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .edicion-form button {
-    margin-right: 10px;
-    padding: 8px 15px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .edicion-form button[type='button'] {
-    background-color: #dc3545;
-  }
-  
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.mis-libros-container h2 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.mensaje-info {
+  color: #888;
+  font-style: italic;
+}
+
+.libro-card {
+  display: flex;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-wrap: wrap; /* Permite que los elementos se ajusten en múltiples líneas */
+  align-items: flex-start; /* Alinea los elementos verticalmente */
+}
+
+.libro-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.libro-card img {
+  width: 120px; /* Tamaño fijo */
+  height: auto; /* Mantiene la proporción */
+  max-width: 100%; /* No se pasa del contenedor */
+  margin-right: 20px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.info-libro h3 {
+  font-size: 1.2em;
+  color: #333;
+}
+
+.info-libro p {
+  font-size: 1em;
+  color: #555;
+  margin: 5px 0;
+}
+
+.acciones {
+  margin-top: 15px;
+}
+
+.btn-actualizar, .btn-eliminar {
+  padding: 8px 15px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  border: none; 
+  outline: none; 
+}
+
+.btn-actualizar {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-actualizar:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+.edicion-form {
+  width: 100%; /* Toma toda la línea disponible */
+  margin-top: 20px;
+}
+
+.edicion-form input, .edicion-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.btn-guardar {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.btn-cancelar {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-left: 10px;
+}

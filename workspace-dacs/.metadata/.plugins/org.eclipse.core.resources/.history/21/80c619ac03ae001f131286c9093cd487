@@ -1,0 +1,7 @@
+package utn.dacs.ms.backend.service;
+
+import java.util.UUID;
+
+public interface FeedbackService {
+    boolean eliminarFeedbackPorLibroId(UUID libroId);
+}

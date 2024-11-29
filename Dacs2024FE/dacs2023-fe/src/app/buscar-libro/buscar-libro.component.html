@@ -1,53 +1,99 @@
 <div class="buscar-libro">
-    <h2>Buscar Libro</h2>
-  <!-- prueba  -->
-    <div class="form-group">
-      <label for="criterioBusqueda">Criterio de Búsqueda</label>
-      <input
-        type="text"
-        id="criterioBusqueda"
-        [(ngModel)]="criterioBusqueda"
-        placeholder="Introduce ISBN, título o autor"
-      />
-    </div>
-  
-    <div class="form-group">
-      <label for="tipoBusqueda">Tipo de Búsqueda</label>
-      <select id="tipoBusqueda" [(ngModel)]="tipoBusqueda">
-        <option value="isbn">ISBN</option>
-        <option value="titulo">Título</option>
-        <option value="autor">Autor</option>
-      </select>
-    </div>
-  
-    <button (click)="buscarLibros()">Buscar</button>
-  
-    <div class="resultados-busqueda" *ngIf="resultadosBusqueda.length > 0">
-      <h3>Resultados de la Búsqueda</h3>
-      <ul>
-        <li *ngFor="let libro of resultadosBusqueda">
-          <strong>{{ libro.titulo }}</strong>
-          <button (click)="seleccionarLibro(libro)">Seleccionar</button>
-        </li>
-      </ul>
-    </div>
-  
-    <div class="form-edicion" *ngIf="libroEnEdicion">
-      <h3>Agregar Libro</h3>
-      <form>
+  <h2>Buscar Libro</h2>
+
+  <!-- Criterio de Búsqueda -->
+  <div class="form-group">
+    <label for="criterioBusqueda">Criterio de Búsqueda</label>
+    <input
+      type="text"
+      id="criterioBusqueda"
+      [(ngModel)]="criterioBusqueda"
+      placeholder="Introduce ISBN, título o autor"
+    />
+  </div>
+
+  <!-- Tipo de Búsqueda -->
+  <div class="form-group">
+    <label for="tipoBusqueda">Tipo de Búsqueda</label>
+    <select id="tipoBusqueda" [(ngModel)]="tipoBusqueda">
+      <option value="isbn">ISBN</option>
+      <option value="titulo">Título</option>
+      <option value="autor">Autor</option>
+    </select>
+  </div>
+
+  <!-- Botón Buscar -->
+  <button (click)="buscarLibros()" [disabled]="cargando">Buscar</button>
+
+  <!-- Indicador de Carga -->
+  <div *ngIf="cargando" class="loading">
+    <p>Cargando resultados...</p>
+  </div>
+
+  <!-- Mensajes de Error o Sin Resultados -->
+  <div *ngIf="mensaje" class="alert alert-danger">
+    {{ mensaje }}
+  </div>
+
+  <!-- Resultados de la Búsqueda -->
+  <div class="resultados-busqueda" *ngIf="!cargando && resultadosBusqueda.length > 0">
+    <h3>Resultados de la Búsqueda</h3>
+    <ul>
+      <li *ngFor="let libro of resultadosBusqueda">
+        <strong>{{ libro.titulo }}</strong>
+        <button (click)="seleccionarLibro(libro)">Seleccionar</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Agregar Libro (Formulario de Edición) -->
+  <div class="form-edicion" *ngIf="libroEnEdicion">
+    <h3>Agregar Libro: <span>{{ libroEnEdicion.titulo }}</span></h3>
+    <form (ngSubmit)="agregarLibro()" #libroForm="ngForm">
+      <div class="form-group">
         <label for="isbn">ISBN:</label>
-        <input id="isbn" [(ngModel)]="libroEnEdicion.isbn" name="isbn" />
-  
+        <input
+          id="isbn"
+          [(ngModel)]="libroEnEdicion.isbn"
+          name="isbn"
+          required
+          #isbn="ngModel"
+        />
+        <div *ngIf="isbn.invalid && isbn.touched" class="error">
+          El ISBN es obligatorio.
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="autor">Autor:</label>
-        <input id="autor" [(ngModel)]="libroEnEdicion.nombreAutor" name="autor" />
-  
+        <input
+          id="autor"
+          [(ngModel)]="libroEnEdicion.nombreAutor"
+          name="autor"
+          required
+          #autor="ngModel"
+        />
+        <div *ngIf="autor.invalid && autor.touched" class="error">
+          El autor es obligatorio.
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="resumen">Resumen:</label>
         <textarea
           id="resumen"
           [(ngModel)]="libroEnEdicion.resumen"
           name="resumen"
+          rows="4"
+          required
+          #resumen="ngModel"
         ></textarea>
-  
+        <div *ngIf="resumen.invalid && resumen.touched" class="error">
+          El resumen es obligatorio.
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="compartir">¿Se puede compartir?</label>
         <input
           type="checkbox"
@@ -55,9 +101,9 @@
           [(ngModel)]="libroEnEdicion.sePuedeCompartir"
           name="compartir"
         />
-  
-        <button (click)="agregarLibro()">Guardar Libro</button>
-      </form>
-    </div>
+      </div>
+
+      <button type="submit" [disabled]="libroForm.invalid">Guardar Libro</button>
+    </form>
   </div>
-  
+</div>

@@ -1,0 +1,52 @@
+<div class="devolver-libros-container">
+  <h2>Libros no devueltos</h2>
+
+  <!-- Mensaje de confirmación o error general -->
+  <div *ngIf="mensaje" class="mensaje-exito">
+    {{ mensaje }}
+  </div>
+
+  <!-- Lista de libros -->
+  <div *ngIf="librosNoDevueltos.length > 0; else noLibros">
+    <div *ngFor="let libro of librosNoDevueltos" class="libro-card">
+      <img [src]="libro.portada" alt="Portada del libro" class="portada" />
+      <div class="info-libro">
+        <h3>{{ libro.titulo }}</h3>
+        <p><strong>Autor:</strong> {{ libro.nombreAutor }}</p>
+        <p><strong>Resumen:</strong> {{ libro.resumen ? libro.resumen : 'El libro no posee resumen' }}</p>
+        
+        <!-- Inputs para nota y comentario -->
+        <div class="input-feedback">
+          <label for="nota">Nota (1-5):</label>
+          <input 
+            id="nota" 
+            type="number" 
+            [(ngModel)]="libroFeedback[libro.id].nota" 
+            min="1" 
+            max="5" 
+            class="input" 
+          />
+          
+          <!-- Mensaje de error si la nota no es válida -->
+          <div *ngIf="errorNota[libro.id]" class="error-message">
+            {{ errorNota[libro.id] }}
+          </div>
+
+          <label for="comentario">Comentario:</label>
+          <textarea 
+            id="comentario" 
+            [(ngModel)]="libroFeedback[libro.id].comentario" 
+            class="input"
+          ></textarea>
+        </div>
+
+        <button (click)="devolverLibro(libro.id)" class="btn-devolver">Devolver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje si no hay libros -->
+  <ng-template #noLibros>
+    <p>No tienes libros pendientes de devolución.</p>
+  </ng-template>
+</div>

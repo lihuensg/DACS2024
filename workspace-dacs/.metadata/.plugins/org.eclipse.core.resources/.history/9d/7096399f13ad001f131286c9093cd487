@@ -1,0 +1,10 @@
+package utn.dacs.ms.backend.service;
+
+import java.util.List;
+
+import utn.dacs.ms.backend.model.entity.Feedback;
+
+public interface FeedbackService {
+    Feedback agregarFeedback(Long libroId, int nota, String comentario);
+    List<Feedback> obtenerFeedbackPorLibro(Long libroId);
+}

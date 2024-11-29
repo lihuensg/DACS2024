@@ -1,29 +1,74 @@
 .libros-compartibles-container {
-    padding: 20px;
-  }
-  
-  .libro-card {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 10px;
-  }
-  
-  button {
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .mensaje {
-    margin: 10px 0;
-    font-weight: bold;
-  }
-  
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.libros-compartibles-container h2 {
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.libro-lista {
+  list-style-type: none;
+  padding: 0;
+}
+
+.libro-card {
+  display: flex;
+  flex-direction: row; /* Cambiar a columna para organizar los elementos verticalmente */
+  align-items: flex-start; /* Alinea los elementos hacia la izquierda */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.libro-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.libro-portada {
+  max-width: 100px;
+  margin-right: 20px;
+  border-radius: 5px;
+}
+
+.libro-info h3 {
+  font-size: 1.2em;
+  color: #333;
+}
+
+.libro-info p {
+  font-size: 1em;
+  color: #555;
+  margin: 5px 0;
+}
+
+.libro-acciones button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.libro-acciones {
+  margin-top: auto; /* Empuja el botón hacia la parte inferior */
+  align-self: flex-end; /* Alinea el contenedor del botón a la derecha */
+}
+
+.libro-acciones button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.empty-message {
+  color: #888;
+  font-style: italic;
+}

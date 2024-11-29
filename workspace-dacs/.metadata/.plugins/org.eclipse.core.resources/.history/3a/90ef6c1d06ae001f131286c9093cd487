@@ -1,0 +1,6 @@
+package utn.dacs.ms.backend.service;
+
+
+public interface FeedbackService {
+    boolean eliminarFeedbackPorLibroId(Integer Id);
+}

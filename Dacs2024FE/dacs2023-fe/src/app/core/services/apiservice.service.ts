@@ -6,13 +6,13 @@ import { IRequestTest } from '../models/request.interface';
 import { LibroDto } from '../models/libroDto.model'; 
 import { LibroBffDto } from '../models/libroBffDto.model';
 import { IResponse, ITestResponse } from '../models/response.interface';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Feedback } from '../models/feedback.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
-
     constructor(private http: HttpClient) {}
    
     //mis-libros
@@ -32,9 +32,9 @@ export class ApiService {
     } 
 
     //libros-compartibles
-    getLibrosCompartibles() {
-        const url = `${environment.backendForFrontendUrl}/backend/libros/compartibles`;
-        return this.http.get<LibroDto[]>(url);
+    getLibrosCompartibles(usuarioId: string) {
+        const url = `${environment.backendForFrontendUrl}/backend/libros/compartibles/${usuarioId}`;
+        return this.http.get<any[]>(url);
     }
       
     prestarLibro(libroId: number, usuarioId: string): Observable<string> {
@@ -43,7 +43,7 @@ export class ApiService {
         return this.http.post<string>(url, null, { responseType: 'text' as 'json' });
     }
 
-  //buscar-libros 
+    //buscar-libros 
     buscarLibroPorIsbn(isbn: string): Observable<LibroBffDto[]> {
         const url = `${environment.backendForFrontendUrl}/libros/isbn/${isbn}`;
         return this.http.get<LibroBffDto[]>(url);
@@ -59,10 +59,42 @@ export class ApiService {
      return this.http.get<LibroBffDto[]>(url);
     }
 
-    agregarLibro(usuarioId: string, libro: LibroDto): Observable<void> {
+    agregarLibro(usuarioId: string, libro: any): Observable<string> {
         const url = `${environment.backendForFrontendUrl}/backend/libros/agregar/${usuarioId}`;
-        return this.http.post<void>(url, libro);
+        
+        // Configuramos 'responseType' para que la respuesta sea tratada como texto
+        return this.http.post<string>(url, libro, { 
+            headers: new HttpHeaders({ 'Content-Type': 'application/json' }), 
+            responseType: 'text' as 'json'  // Esto asegura que la respuesta sea tratada como texto
+        });
     }
+    
+
+    // devolver-libros
+    getLibrosNoDevueltos(usuarioId: string) {
+        const url = `${environment.backendForFrontendUrl}/backend/libros/nodevueltos/${usuarioId}`;
+        return this.http.get<LibroDto[]>(url);
+    }
+
+    devolverLibro(libroId: number, usuarioId: string, nota: number, comentario: string): Observable<string> {
+        const url = `${environment.backendForFrontendUrl}/backend/libros/${libroId}/devolver?usuarioId=${usuarioId}&nota=${nota}&comentario=${comentario}`;
+        return this.http.post<string>(url, null, { responseType: 'text' as 'json' });
+    }
+
+    //feedback-libros
+    getFeedbackLibrosDevueltos(usuarioId: string): Observable<Feedback[]> {
+        const url = `${environment.backendForFrontendUrl}/backend/libros/devueltos?usuarioId=${usuarioId}`;
+        return this.http.get<Feedback[]>(url);
+    }
+
+    eliminarFeedback(feedbackId: number): Observable<string> {
+        const url = `${environment.backendForFrontendUrl}/backend/feedback/eliminar/${feedbackId}`;
+        return this.http.delete<string>(url, { responseType: 'text' as 'json' });
+    }
+
+
+
+
 
     //No tener en cuenta  
     getPing() {
